@@ -15,38 +15,35 @@ class CategorieController
 {
     private CategorieRepository $categorieRepository;
 
-    // Injection du CategorieRepository via le constructeur
     public function __construct(CategorieRepository $categorieRepository)
     {
         $this->categorieRepository = $categorieRepository;
     }
 
-    // Route pour récupérer toutes les catégories (GET)
+    // Récupérer toutes les catégories (GET)
     #[Route('', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $categories = $this->categorieRepository->findAll();
-        return new JsonResponse($categories);
+        $categoriesArray = array_map(fn(Categorie $categorie) => $categorie->toArray(), $categories);
+
+        return new JsonResponse($categoriesArray, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 
-    // Route pour récupérer une catégorie par son ID (GET)
+    // Récupérer une catégorie par ID (GET)
     #[Route('/{id}', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        // Récupérer la catégorie par son ID
         $categorie = $this->categorieRepository->find($id);
 
-        // Si la catégorie n'est pas trouvée, renvoyer une erreur 404
         if (!$categorie) {
             return new JsonResponse(['error' => 'Catégorie non trouvée.'], 404);
         }
 
-        // Sinon, retourner la catégorie en réponse
-        return new JsonResponse($categorie);
+        return new JsonResponse($categorie->toArray(), 200, []);
     }
 
-
-    // Route pour créer une nouvelle catégorie (POST)
+    // Créer une nouvelle catégorie (POST)
     #[Route('', name: 'categorie_create', methods: ['POST'])]
     public function createCategorie(
         Request $request,
@@ -55,8 +52,12 @@ class CategorieController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
+        if (!$data || !isset($data['nom'])) {
+            return new JsonResponse(['error' => 'Données invalides. Le champ "nom" est requis.'], 400);
+        }
+
         $categorie = new Categorie();
-        $categorie->setNom($data['nom'] ?? null);
+        $categorie->setNom($data['nom']);
 
         $errors = $validator->validate($categorie);
         if (count($errors) > 0) {
@@ -66,10 +67,10 @@ class CategorieController
         $entityManager->persist($categorie);
         $entityManager->flush();
 
-        return new JsonResponse(['message' => 'Catégorie créée avec succès !'], 201);
+        return new JsonResponse($categorie->toArray(), 201);
     }
 
-    // Route pour mettre à jour une catégorie (PUT)
+    // Mettre à jour une catégorie (PUT)
     #[Route('/{id}', name: 'categorie_update', methods: ['PUT'])]
     public function updateCategorie(
         int $id,
@@ -77,14 +78,16 @@ class CategorieController
         ValidatorInterface $validator,
         EntityManagerInterface $entityManager
     ): JsonResponse {
-        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+        $categorie = $this->categorieRepository->find($id);
 
         if (!$categorie) {
             return new JsonResponse(['error' => 'Catégorie non trouvée.'], 404);
         }
 
         $data = json_decode($request->getContent(), true);
-        $categorie->setNom($data['nom'] ?? $categorie->getNom());
+        if (isset($data['nom'])) {
+            $categorie->setNom($data['nom']);
+        }
 
         $errors = $validator->validate($categorie);
         if (count($errors) > 0) {
@@ -93,14 +96,14 @@ class CategorieController
 
         $entityManager->flush();
 
-        return new JsonResponse(['message' => 'Catégorie mise à jour avec succès !'], 200);
+        return new JsonResponse($categorie->toArray(), 200);
     }
 
-    // Route pour supprimer une catégorie (DELETE)
+    // Supprimer une catégorie (DELETE)
     #[Route('/{id}', name: 'categorie_delete', methods: ['DELETE'])]
     public function deleteCategorie(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
-        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+        $categorie = $this->categorieRepository->find($id);
 
         if (!$categorie) {
             return new JsonResponse(['error' => 'Catégorie non trouvée.'], 404);

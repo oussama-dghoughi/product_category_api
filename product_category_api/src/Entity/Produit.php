@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -101,5 +102,20 @@ class Produit
         $this->categorie = $categorie;
 
         return $this;
+    }
+
+    /**
+     * Convertit l'objet Produit en tableau.
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'nom' => $this->nom,
+            'description' => $this->description,
+            'prix' => $this->prix,
+            'dateCreation' => $this->dateCreation?->format('Y-m-d H:i:s'),
+            'categorie' => $this->categorie?->getId(), // Retourne seulement l'ID de la catégorie
+        ];
     }
 }

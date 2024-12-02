@@ -6,6 +6,7 @@ use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -24,12 +25,13 @@ class Categorie
     private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Produit::class, cascade: ['persist', 'remove'])]
-    private $produits;
+    private Collection $produits;
 
     public function __construct()
     {
         $this->produits = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -65,12 +67,23 @@ class Categorie
     public function removeProduit(Produit $produit): self
     {
         if ($this->produits->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
             if ($produit->getCategorie() === $this) {
                 $produit->setCategorie(null);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Convertit l'entité Categorie en un tableau associatif.
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'nom' => $this->getNom(),
+            'produits' => $this->getProduits()->map(fn(Produit $produit) => $produit->toArray())->toArray(),
+        ];
     }
 }
