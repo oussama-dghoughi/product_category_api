@@ -27,10 +27,9 @@ class ProduitController
     }
 
     #[Route('', methods: ['GET'])]
-    public function index(): JsonResponse
+public function index(): JsonResponse
     {
-        $produits = $this->produitRepository->findAll();
-        return new JsonResponse($produits);
+        dd('Index method reached');
     }
 
     #[Route('/{id}', methods: ['GET'])]
@@ -132,4 +131,6 @@ class ProduitController
 
         return new JsonResponse(['message' => 'Produit supprimé avec succès !'], 200);
     }
+   
+    
 }
