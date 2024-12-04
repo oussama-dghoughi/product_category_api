@@ -12,7 +12,7 @@ Une plateforme pour la gestion des catégories et des produits, construite avec 
 3. [Prérequis](#prérequis)  
 4. [Installation](#installation)  
    - [Frontend](#installation-du-frontend)  
-   - [Backend (Product Category API)](#installation-du-backend-product_category_api)  
+   - [Backend (product_category api)](#installation-du-backend-product_category_api)  
 5. [Utilisation](#utilisation)  
 6. [Choix Techniques](#choix-techniques)  
 7. [Structure du Projet](#structure-du-projet)  
