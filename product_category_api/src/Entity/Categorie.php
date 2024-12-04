@@ -83,7 +83,7 @@ class Categorie
         return [
             'id' => $this->getId(),
             'nom' => $this->getNom(),
-            'produits' => $this->getProduits()->map(fn(Produit $produit) => $produit->toArray())->toArray(),
+            'produits' => $this->getProduits()->map(fn($produit) => $produit->toArray())->toArray(),
         ];
     }
 }

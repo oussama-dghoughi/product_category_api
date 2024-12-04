@@ -49,37 +49,43 @@ class ProduitController
         return new JsonResponse($produit->toArray(), 200);
     }
 
-    #[Route('', name: 'create_produit', methods: ['POST'])]
-    public function createProduit(Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
+    // Ajouter un produit (POST)
+    #[Route('', methods: ['POST'])]
+public function addProduit(Request $request): JsonResponse
+{
+    // Récupération des données envoyées dans la requête
+    $data = json_decode($request->getContent(), true);
 
-        if (empty($data['nom']) || empty($data['description']) || empty($data['prix']) || empty($data['categorie'])) {
-            return new JsonResponse(['error' => 'Tous les champs obligatoires doivent être remplis.'], 400);
-        }
-
-        $categorie = $this->entityManager->getRepository(Categorie::class)->find($data['categorie']);
-        if (!$categorie) {
-            return new JsonResponse(['error' => 'Catégorie associée non trouvée.'], 404);
-        }
-
-        $produit = new Produit();
-        $produit->setNom($data['nom'])
-                ->setDescription($data['description'])
-                ->setPrix((float)$data['prix'])
-                ->setDateCreation(new \DateTime($data['dateCreation'] ?? 'now'))
-                ->setCategorie($categorie);
-
-        $errors = $this->validator->validate($produit);
-        if (count($errors) > 0) {
-            return new JsonResponse(['errors' => (string)$errors], 400);
-        }
-
-        $this->entityManager->persist($produit);
-        $this->entityManager->flush();
-
-        return new JsonResponse(['message' => 'Produit créé avec succès !', 'produit' => $produit->toArray()], 201);
+    // Vérification si toutes les données nécessaires sont présentes
+    if (!isset($data['nom'], $data['description'], $data['prix'], $data['dateCreation'], $data['categorie'])) {
+        return new JsonResponse(['message' => 'Données invalides'], 400);
     }
+
+    // Récupérer la catégorie en fonction de l'ID envoyé
+    $categorie = $this->entityManager->getRepository(Categorie::class)->find($data['categorie']);
+    
+    // Vérification si la catégorie existe
+    if (!$categorie) {
+        return new JsonResponse(['message' => 'Catégorie introuvable'], 404);
+    }
+
+    // Création du produit
+    $produit = new Produit();
+    $produit->setNom($data['nom']);
+    $produit->setDescription($data['description']);
+    $produit->setPrix($data['prix']);
+    $produit->setDateCreation(new \DateTime($data['dateCreation']));
+    $produit->setCategorie($categorie); // Assigner la catégorie trouvée
+
+    // Enregistrement du produit dans la base de données
+    $this->entityManager->persist($produit);
+    $this->entityManager->flush();
+
+    // Retourner le produit ajouté sous forme de JSON
+    return new JsonResponse($produit->toArray(), 201);
+}
+
+
 
     #[Route('/{id}', name: 'update_produit', methods: ['PUT'])]
     public function updateProduit(int $id, Request $request): JsonResponse
