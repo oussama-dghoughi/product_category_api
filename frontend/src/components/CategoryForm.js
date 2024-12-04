@@ -4,7 +4,7 @@ const CategoryForm = ({ onSubmit, initialData = {} }) => {
   const [name, setName] = useState(initialData.nom || '');
 
   useEffect(() => {
-    setName(initialData.nom || '');  // Met à jour si une catégorie est modifiée
+    setName(initialData.nom || '');  
   }, [initialData]);
 
   const handleSubmit = (e) => {
