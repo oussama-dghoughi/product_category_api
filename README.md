@@ -1,176 +1,206 @@
-product_category_api
 
-Une plateforme pour la gestion des catégories et des produits, construite avec React pour le frontend et Symfony pour le backend.
+# **Product Category API**
 
-Table des matières
+Une plateforme pour la gestion des catégories et des produits, construite avec **React** pour le frontend et **Symfony** pour le backend.
 
-Introduction
+---
 
-Fonctionnalités
+## **Table des matières**
 
-Prérequis
+1. [Introduction](#introduction)  
+2. [Fonctionnalités](#fonctionnalités)  
+3. [Prérequis](#prérequis)  
+4. [Installation](#installation)  
+   - [Frontend](#installation-du-frontend)  
+   - [Backend (Product Category API)](#installation-du-backend-product_category_api)  
+5. [Utilisation](#utilisation)  
+6. [Choix Techniques](#choix-techniques)  
+7. [Structure du Projet](#structure-du-projet)  
+8. [Tests et Validation](#tests-et-validation)
+9. [Démo](#Démo)
+10. [Contributions](#contributions)   
 
-Installation
+---
 
-Frontend
+## **Introduction**
 
-product_category_api (Backend)
+Ce projet est une application web complète pour gérer :  
+- Les **catégories** de produits.  
+- Les **produits** eux-mêmes avec leurs attributs associés.  
 
-Utilisation
+Il est conçu pour offrir une interface utilisateur moderne et intuitive, connectée à une API backend robuste et sécurisée.
 
-Choix Techniques
+---
 
-Structure du Projet
+## **Fonctionnalités**
 
-Contributions
+### **Frontend**
+- Interface utilisateur intuitive avec navigation fluide grâce à **React Router**.  
+- Affichage des listes de catégories et produits.  
+- Actions CRUD pour ajouter, modifier ou supprimer des catégories et produits.  
 
-Introduction
+### **Backend (Product Category API)**  
+- API REST pour gérer les catégories et produits.  
+- Validation des données en entrée avec des règles strictes.  
+- Gestion des relations entre les entités (catégories et produits).  
+- Documentation Swagger/OpenAPI pour faciliter l'intégration.  
 
-Ce projet est une application web complète qui permet :
+---
 
-De gérer des catégories et des produits via une interface utilisateur moderne.
-De connecter un frontend React avec un backend Symfony pour fournir des fonctionnalités robustes et sécurisées.
+## **Prérequis**
 
-Fonctionnalités
+- **npm** ou **yarn** pour le frontend.  
+- **PHP** (v8.1 ou supérieur) avec **Composer** pour le backend.  
+- **MySQL** pour la base de données.  
+- **Postman** ou **Swagger UI** pour tester les endpoints de l'API (optionnel).  
 
-Frontend
+---
 
-Interface utilisateur intuitive pour gérer les catégories et produits.
-Navigation fluide entre les différentes sections grâce à React Router.
+## **Installation**
 
-product_category_api(Backend)
+### **Installation du Frontend**
 
-API REST pour gérer les actions CRUD (Create, Read, Update, Delete).
-Validation des données avant l'enregistrement.
+1. **Cloner le dépôt** :  
+   ```bash
+   git clone https://github.com/votre-utilisateur/votre-projet.git
+   cd votre-projet/frontend
+   ```
 
-Prérequis
+2. **Installer les dépendances** :  
+   ```bash
+   npm install
+   ```
 
-Node.js (v16 ou supérieur) et npm ou yarn pour le frontend.
+3. **Configurer les variables d'environnement** :  
+   Créez un fichier `.env` à la racine :  
+   ```env
+   REACT_APP_API_URL=http://localhost:8000
+   ```
 
-PHP (v8.1 ou supérieur) avec Composer pour le backend.
+4. **Lancer le projet** :  
+   ```bash
+   npm start
+   ```
 
-MySQL pour la base de données.
+   L'application frontend sera disponible sur `http://localhost:3000`.
 
-Postman (optionnel) pour tester les endpoints API.
+---
 
-Installation
+### **Installation du Backend (Product Category API)**
 
-Installation du Frontend
+1. **Accéder au répertoire backend** :  
+   ```bash
+   cd ../product_category_api
+   ```
 
-Cloner le dépôt :
+2. **Installer les dépendances PHP avec Composer** :  
+   ```bash
+   composer install
+   ```
 
-git clone https://github.com/votre-utilisateur/votre-projet.git
+3. **Configurer la base de données** :  
+   - Créez un fichier `.env.local` :  
+     ```env
+     DATABASE_URL="mysql://utilisateur:motdepasse@127.0.0.1:3306/nom_base"
+     ```
 
-cd votre-projet/frontend
+4. **Créer et migrer la base de données** :  
+   ```bash
+   php bin/console doctrine:database:create
+   php bin/console doctrine:migrations:migrate
+   ```
 
-Installer les dépendances :
+5. **Démarrer le serveur Symfony** :  
+   ```bash
+   symfony server:start
+   ```
 
+   L'API backend sera accessible sur `http://localhost:8000`.
 
-npm install
+---
 
-Configurer les variables d'environnement :
+## **Utilisation**
 
-Créez un fichier .env :
+1. Lancez le **backend** avec :  
+   ```bash
+   symfony server:start
+   ```
 
-REACT_APP_API_URL=http://localhost:8000
+2. Lancez le **frontend** avec :  
+   ```bash
+   npm start
+   ```
 
-Lancer le projet :
+3. Accédez à l'application sur [http://localhost:3000](http://localhost:3000).
 
+---
 
-npm start
-L'application frontend sera disponible sur http://localhost:8000.
+## **Choix Techniques**
 
-Installation du Backend
+### **Frontend**
+- **React et Tailwind CSS** : Pour construire une interface réactive et modulaire.  
+- **Axios** : Simplifie les appels API.  
+- **React Router** : Gestion de la navigation dynamique.  
 
-Accéder au répertoire backend :
+### **Backend**
+- **Symfony** : Framework PHP flexible et performant pour créer des APIs REST.  
+- **Doctrine ORM** : Gestion efficace des interactions avec MySQL.  
+- **Validation des données** : Utilisation des contraintes Symfony Validator.  
 
+---
 
-cd ../product_category_api
+## **Structure du Projet**
 
-Installer les dépendances PHP avec Composer :
+### **Frontend**
 
-
-composer install
-
-Configurer la base de données :
-
-Créez un fichier .env.local si nécessaire.
-
-Configurez les paramètres MySQL :
-
-env
-
-DATABASE_URL="mysql://utilisateur:motdepasse@127.0.0.1:3306/nom_base"
-
-Créer et migrer la base de données :
-
-
-php bin/console doctrine:database:create
-
-php bin/console doctrine:migrations:migrate
-
-Démarrer le serveur Symfony :
-
-symfony server:start
-
-L'API backend sera accessible sur http://localhost:8000.
-
-
-Utilisation
-
-Lancez le backend avec symfony server:start.
-
-Lancez le frontend avec npm start.
-
-Accédez à l'application sur http://localhost:8000.
-
-Choix Techniques
-
-Frontend
-
-React : Pour sa modularité et sa simplicité d'intégration avec des APIs REST.
-
-Axios : Pour les appels API.
-
-CSS Modules : Gestion localisée des styles.
-
-Backend
-
-Symfony : Framework robuste pour créer des APIs sécurisées et performantes.
-
-Doctrine ORM : Pour l'interaction avec la base de données MySQL.
-
-Validation des données : Utilisation de ValidatorInterface pour vérifier la conformité des entrées utilisateur.
-
-Structure du Projet
-
-Frontend
-
+```plaintext
 frontend/
 │
 ├── src/
 │   ├── components/        # Composants réutilisables
-│   ├── pages/             # Pages principales
 │   ├── services/          # Gestion des appels API
-│   ├── App.js             # Point d'entrée
+│   ├── App.js             # Point d'entrée de l'application
 │   └── index.js           # Initialisation React
 └── package.json
-Backend
+```
 
+### **Backend**
+
+```plaintext
 product_category_api/
-│└── migrations/            # Scripts de migration
+│└── migrations/        # Scripts de migration
 ├── src/
-│   ├── Controller/        # Contrôleurs Symfony
+│   ├── Controller/        # Contrôleurs pour les endpoints
 │   ├── Entity/            # Entités Doctrine
 │   ├── Repository/        # Requêtes spécifiques
-│         
+│   
 ├── config/                # Configuration Symfony
+├── public/                # Point d'entrée (index.php)
 ├── .env                   # Variables d'environnement
 └── composer.json
+```
 
-Contributions
+---
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+## **Tests et Validation**
 
+### **Frontend**
+- Tests manuels avec les navigateurs modernes pour vérifier l'interface utilisateur.  
+
+### **Backend**
+- Tests des endpoints API avec **Postman** ou **Swagger UI**.  
+- Validation des migrations de base de données et des contraintes.  
+
+---
+# **Démo**
+
+https://youtu.be/TqWf3M1sHgM
+
+## **Contributions**
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une **issue** ou une **pull request**.  
+
+
+---
 
 
